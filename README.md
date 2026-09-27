@@ -115,6 +115,10 @@ You will be asked to change your password on first login.
 
 For Docker Compose, persistent storage, and other setup options, see the [Getting Started Guide](https://docs.snapotter.com/guide/getting-started). For NVIDIA CUDA acceleration and tag details, see [Docker Tags](https://docs.snapotter.com/guide/docker-tags).
 
+## ☁️ One-Click Deploy
+
+[![Deploy on RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/snapotter/)
+
 ## Documentation
 
 - [Getting Started](https://docs.snapotter.com/guide/getting-started)
