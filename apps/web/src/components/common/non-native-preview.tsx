@@ -68,6 +68,19 @@ export function NonNativePreview({
     }
   }, []);
 
+  // The call sites don't key this component per file, so a new input has to
+  // reset it here. Otherwise the last file's error (a 413 with no Retry) or
+  // its finished preview shows under this one, and a request still in flight
+  // for the old file could land after the switch.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: file, src, and filename are the triggers
+  useEffect(() => {
+    abortRef.current?.abort();
+    stopMessageRotation();
+    setState("idle");
+    setTooLarge(false);
+    setPreviewUrl(null);
+  }, [file, src, filename, stopMessageRotation]);
+
   const generatePreview = useCallback(async () => {
     setState("generating");
     startMessageRotation();
@@ -96,7 +109,9 @@ export function NonNativePreview({
       });
 
       if (!response.ok) {
-        throw new SafeError("Media preview generation failed", {
+        // The status goes in the message: Sentry's scrubber keeps a
+        // SafeError's message but drops its code.
+        throw new SafeError(`Media preview generation failed (HTTP ${response.status})`, {
           code: `preview-http-${response.status}`,
           statusCode: response.status,
         });
@@ -115,22 +130,26 @@ export function NonNativePreview({
         const status = err instanceof SafeError ? err.statusCode : undefined;
         setTooLarge(status === 413);
         setState("error");
-        // A 4xx is about the file (over the upload limit, or ffmpeg couldn't
-        // decode it) and the panel says so. A 5xx or a failed request is a
-        // fault nobody would otherwise hear about (#1280).
-        if (status === undefined || status >= 500) {
+        // A 413 (over the upload limit) or 422 (ffmpeg couldn't decode it) is
+        // about the file, and the panel says so. Anything else, whether a 5xx,
+        // an expired session, a rate limit, or a failed request, is a fault
+        // nobody would otherwise hear about (#1280).
+        if (status !== 413 && status !== 422) {
           void captureHandledError(
             err instanceof SafeError
               ? err
-              : new SafeError("Media preview request failed", { code: "preview-network" }),
-            { error_class: "operational", modality },
+              : new SafeError("Media preview request failed", {
+                  code: "preview-request",
+                  cause: err,
+                }),
+            { error_class: "operational" },
           );
         }
       }
     } finally {
       stopMessageRotation();
     }
-  }, [file, src, filename, modality, previewUrl, startMessageRotation, stopMessageRotation]);
+  }, [file, src, filename, previewUrl, startMessageRotation, stopMessageRotation]);
 
   const ext = filename.split(".").pop()?.toUpperCase() ?? "";
   const IconComponent = modality === "audio" ? Volume2 : Video;
