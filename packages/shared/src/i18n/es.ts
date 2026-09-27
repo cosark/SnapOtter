@@ -5136,6 +5136,7 @@ export const es: TranslationKeys = {
     networkError: "Error de red. Verifica tu conexión.",
     invalidCredentials: "Nombre de usuario o contraseña inválidos",
     connectionError: "Error de conexión",
+    fileTooLarge: "Este archivo supera el límite de tamaño de carga del servidor.",
   },
   sidebar: {
     sponsor: "Apóyanos",

@@ -4843,6 +4843,7 @@ export const zhTW: TranslationKeys = {
     networkError: "網路錯誤，請檢查您的連線。",
     invalidCredentials: "使用者名稱或密碼無效",
     connectionError: "連線錯誤",
+    fileTooLarge: "此檔案超過伺服器的上傳大小限制。",
   },
   sidebar: {
     sponsor: "支持我們",

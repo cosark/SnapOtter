@@ -5114,6 +5114,7 @@ export const vi: TranslationKeys = {
     networkError: "Lỗi mạng. Kiểm tra kết nối của bạn.",
     invalidCredentials: "Tên đăng nhập hoặc mật khẩu không đúng",
     connectionError: "Lỗi kết nối",
+    fileTooLarge: "Tệp này vượt quá giới hạn kích thước tải lên của máy chủ.",
   },
   sidebar: {
     sponsor: "Ủng hộ chúng tôi",

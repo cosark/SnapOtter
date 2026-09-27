@@ -5059,6 +5059,7 @@ export const en = {
     networkError: "Network error. Check your connection.",
     invalidCredentials: "Invalid username or password",
     connectionError: "Connection error",
+    fileTooLarge: "This file is over the server's upload size limit.",
   },
   sidebar: {
     tools: "Tools",

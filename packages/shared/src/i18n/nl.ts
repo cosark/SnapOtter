@@ -5144,6 +5144,7 @@ export const nl: TranslationKeys = {
     networkError: "Netwerkfout. Controleer je verbinding.",
     invalidCredentials: "Ongeldige gebruikersnaam of wachtwoord",
     connectionError: "Verbindingsfout",
+    fileTooLarge: "Dit bestand is groter dan de uploadlimiet van de server.",
   },
   sidebar: {
     sponsor: "Steun ons",

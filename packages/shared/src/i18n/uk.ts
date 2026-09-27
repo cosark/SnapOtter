@@ -5132,6 +5132,7 @@ export const uk: TranslationKeys = {
     networkError: "Помилка мережі. Перевірте з'єднання.",
     invalidCredentials: "Невірне ім'я користувача або пароль",
     connectionError: "Помилка з'єднання",
+    fileTooLarge: "Цей файл перевищує обмеження сервера на розмір завантаження.",
   },
   sidebar: {
     sponsor: "Підтримайте нас",

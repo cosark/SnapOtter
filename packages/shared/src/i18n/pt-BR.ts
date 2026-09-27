@@ -5139,6 +5139,7 @@ export const ptBR: TranslationKeys = {
     networkError: "Erro de rede. Verifique sua conexão.",
     invalidCredentials: "Nome de usuário ou senha inválidos",
     connectionError: "Erro de conexão",
+    fileTooLarge: "Este arquivo excede o limite de tamanho de envio do servidor.",
   },
   sidebar: {
     sponsor: "Apoie-nos",

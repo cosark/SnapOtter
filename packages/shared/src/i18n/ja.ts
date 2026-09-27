@@ -5072,6 +5072,7 @@ export const ja: TranslationKeys = {
     networkError: "ネットワークエラー。接続を確認してください。",
     invalidCredentials: "ユーザー名またはパスワードが無効です",
     connectionError: "接続エラー",
+    fileTooLarge: "このファイルはサーバーのアップロードサイズ上限を超えています。",
   },
   sidebar: {
     sponsor: "支援する",

@@ -5045,6 +5045,7 @@ export const ko: TranslationKeys = {
     networkError: "네트워크 오류. 연결을 확인하세요.",
     invalidCredentials: "사용자명 또는 비밀번호가 올바르지 않습니다",
     connectionError: "연결 오류",
+    fileTooLarge: "이 파일은 서버의 업로드 크기 제한을 초과합니다.",
   },
   sidebar: {
     sponsor: "후원하기",

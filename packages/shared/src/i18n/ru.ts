@@ -5134,6 +5134,7 @@ export const ru: TranslationKeys = {
     networkError: "Сетевая ошибка. Проверьте подключение.",
     invalidCredentials: "Неверное имя пользователя или пароль",
     connectionError: "Ошибка подключения",
+    fileTooLarge: "Этот файл превышает ограничение сервера на размер загрузки.",
   },
   sidebar: {
     sponsor: "Поддержите нас",

@@ -32,6 +32,19 @@ export const MULTIPART_MAX_FIELDS = 100;
 const DONE = Symbol("multipart-done");
 
 /**
+ * The error an over-limit file part fails with. It carries a 413, and the code
+ * @fastify/multipart uses for the same condition, so a route that lets it
+ * escape answers 413 through the error handler instead of a bare-Error 500
+ * (#1280). Routes that catch it keep their own mapping.
+ */
+function fileTooLargeError(): Error {
+  return Object.assign(new Error("request file too large"), {
+    statusCode: 413,
+    code: "FST_REQ_FILE_TOO_LARGE",
+  });
+}
+
+/**
  * Iterate multipart parts by driving busboy directly.
  *
  * Replaces @fastify/multipart's request.parts(): that iterator treats the
@@ -89,7 +102,7 @@ export async function* multipartParts(
     // throws it normally, since EventEmitter delivers "error" to every
     // registered listener, not just the first.
     stream.on("error", () => {});
-    stream.on("limit", () => stream.destroy(new Error("request file too large")));
+    stream.on("limit", () => stream.destroy(fileTooLargeError()));
     push({
       type: "file",
       fieldname,

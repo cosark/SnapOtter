@@ -4841,6 +4841,7 @@ export const zhCN: TranslationKeys = {
     networkError: "网络错误。请检查您的连接。",
     invalidCredentials: "用户名或密码错误",
     connectionError: "连接错误",
+    fileTooLarge: "此文件超过了服务器的上传大小限制。",
   },
   sidebar: {
     sponsor: "支持我们",

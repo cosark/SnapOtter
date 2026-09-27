@@ -5059,6 +5059,7 @@ export const th: TranslationKeys = {
     networkError: "ข้อผิดพลาดเครือข่าย ตรวจสอบการเชื่อมต่อของคุณ",
     invalidCredentials: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
     connectionError: "ข้อผิดพลาดในการเชื่อมต่อ",
+    fileTooLarge: "ไฟล์นี้มีขนาดเกินขีดจำกัดการอัปโหลดของเซิร์ฟเวอร์",
   },
   sidebar: {
     sponsor: "สนับสนุนเรา",

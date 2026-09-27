@@ -5136,6 +5136,7 @@ export const tr: TranslationKeys = {
     networkError: "Ağ hatası. Bağlantınızı kontrol edin.",
     invalidCredentials: "Geçersiz kullanıcı adı veya parola",
     connectionError: "Bağlantı hatası",
+    fileTooLarge: "Bu dosya sunucunun yükleme boyutu sınırını aşıyor.",
   },
   sidebar: {
     sponsor: "Bize destek olun",

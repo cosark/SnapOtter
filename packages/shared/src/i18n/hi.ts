@@ -4913,6 +4913,7 @@ export const hi: TranslationKeys = {
     networkError: "नेटवर्क त्रुटि। अपना कनेक्शन जांचें।",
     invalidCredentials: "गलत यूज़रनेम या पासवर्ड",
     connectionError: "कनेक्शन त्रुटि",
+    fileTooLarge: "यह फाइल सर्वर की अपलोड साइज़ सीमा से बड़ी है।",
   },
   sidebar: {
     sponsor: "हमारा समर्थन करें",

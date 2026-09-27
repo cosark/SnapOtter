@@ -5127,6 +5127,7 @@ export const id: TranslationKeys = {
     networkError: "Kesalahan jaringan. Periksa koneksi Anda.",
     invalidCredentials: "Nama pengguna atau kata sandi salah",
     connectionError: "Kesalahan koneksi",
+    fileTooLarge: "File ini melebihi batas ukuran unggahan server.",
   },
   sidebar: {
     sponsor: "Dukung kami",

@@ -5159,6 +5159,7 @@ export const fr: TranslationKeys = {
     networkError: "Erreur réseau. Vérifiez votre connexion.",
     invalidCredentials: "Nom d'utilisateur ou mot de passe invalide",
     connectionError: "Erreur de connexion",
+    fileTooLarge: "Ce fichier dépasse la taille maximale d'envoi autorisée par le serveur.",
   },
   sidebar: {
     sponsor: "Soutenez-nous",

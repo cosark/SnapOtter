@@ -1,6 +1,8 @@
+import { SafeError } from "@snapotter/shared";
 import { Play, RefreshCw, Video, Volume2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "@/contexts/i18n-context";
+import { captureHandledError } from "@/lib/analytics";
 import { formatHeaders } from "@/lib/api";
 import { appUrl } from "@/lib/app-url";
 import { formatFileSize } from "@/lib/download";
@@ -38,6 +40,7 @@ export function NonNativePreview({
   const { t } = useTranslation();
   const [state, setState] = useState<PreviewState>("idle");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [tooLarge, setTooLarge] = useState(false);
   const [messageIndex, setMessageIndex] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -93,7 +96,10 @@ export function NonNativePreview({
       });
 
       if (!response.ok) {
-        throw new Error(`Preview generation failed: ${response.status}`);
+        throw new SafeError("Media preview generation failed", {
+          code: `preview-http-${response.status}`,
+          statusCode: response.status,
+        });
       }
 
       const blob = await response.blob();
@@ -106,12 +112,25 @@ export function NonNativePreview({
       setState("ready");
     } catch (err) {
       if ((err as Error).name !== "AbortError") {
+        const status = err instanceof SafeError ? err.statusCode : undefined;
+        setTooLarge(status === 413);
         setState("error");
+        // A 4xx is about the file (over the upload limit, or ffmpeg couldn't
+        // decode it) and the panel says so. A 5xx or a failed request is a
+        // fault nobody would otherwise hear about (#1280).
+        if (status === undefined || status >= 500) {
+          void captureHandledError(
+            err instanceof SafeError
+              ? err
+              : new SafeError("Media preview request failed", { code: "preview-network" }),
+            { error_class: "operational", modality },
+          );
+        }
       }
     } finally {
       stopMessageRotation();
     }
-  }, [file, src, filename, previewUrl, startMessageRotation, stopMessageRotation]);
+  }, [file, src, filename, modality, previewUrl, startMessageRotation, stopMessageRotation]);
 
   const ext = filename.split(".").pop()?.toUpperCase() ?? "";
   const IconComponent = modality === "audio" ? Volume2 : Video;
@@ -177,19 +196,24 @@ export function NonNativePreview({
           <div className="mx-auto w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mb-4">
             <IconComponent className="h-8 w-8 text-muted-foreground" />
           </div>
-          <p className="font-medium text-foreground mb-1">{t.toolPage.previewFailed}</p>
+          <p className="font-medium text-foreground mb-1">
+            {tooLarge ? t.errors.fileTooLarge : t.toolPage.previewFailed}
+          </p>
           <p className="text-sm text-muted-foreground mb-3">
             {filename}
             {fileSize != null && <> &middot; {formatFileSize(fileSize)}</>}
           </p>
-          <button
-            type="button"
-            onClick={generatePreview}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity"
-          >
-            <RefreshCw className="h-4 w-4" />
-            {t.common.retry}
-          </button>
+          {/* The same file will hit the same limit, so a retry can't help. */}
+          {!tooLarge && (
+            <button
+              type="button"
+              onClick={generatePreview}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity"
+            >
+              <RefreshCw className="h-4 w-4" />
+              {t.common.retry}
+            </button>
+          )}
         </div>
       </div>
     );

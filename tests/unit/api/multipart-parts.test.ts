@@ -129,6 +129,28 @@ describe("multipartParts", () => {
     await generator.return(undefined);
   });
 
+  it("fails an over-limit file with a 413 error, not a bare Error (#1280)", async () => {
+    // A bare Error has no status, so a route that lets it escape (the on-demand
+    // preview did) answered 500. The status must travel with the error. The
+    // message keeps "file too large" because ocrUploadErrorStatus matches on it.
+    const body = multipartBody([
+      { name: "file", filename: "big.bin", content: Buffer.alloc(4096, 1) },
+    ]);
+
+    let caught: unknown;
+    try {
+      for await (const part of multipartParts(fakeRequest(body), { fileSize: 1024 })) {
+        if (part.type === "file") await drain(part.file);
+      }
+    } catch (err) {
+      caught = err;
+    }
+
+    expect(caught).toBeInstanceOf(Error);
+    expect(caught).toMatchObject({ statusCode: 413, code: "FST_REQ_FILE_TOO_LARGE" });
+    expect((caught as Error).message).toMatch(/file too large/i);
+  });
+
   it("rejects a request with more than 100 text fields", async () => {
     const body = multipartBody(
       Array.from({ length: 101 }, (_, i) => ({ name: `field${i}`, content: "x" })),

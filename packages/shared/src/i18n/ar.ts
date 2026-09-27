@@ -5088,6 +5088,7 @@ export const ar: TranslationKeys = {
     networkError: "خطأ في الشبكة. تحقق من اتصالك.",
     invalidCredentials: "اسم المستخدم أو كلمة المرور غير صحيحة",
     connectionError: "خطأ في الاتصال",
+    fileTooLarge: "هذا الملف يتجاوز الحد الأقصى لحجم الرفع على الخادم.",
   },
   sidebar: {
     sponsor: "ادعمنا",
